@@ -22,7 +22,7 @@ if not installed that npm, add --force
 4. Create database in Firestore and set true
 
 # Step 2: setting Oauth google
-1. Make OAuth google in [Google-Cloud]([https://firebase.google.com](https://console.cloud.google.com/)) and get environment key OAuth
+1. Make OAuth google in [Google Cloud](https://console.cloud.google.com/) and get environment key OAuth
 2. Write name environment like src/app/api/[...nextauth]/route.ts
 
 # Last Step:
