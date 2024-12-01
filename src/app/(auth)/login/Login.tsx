@@ -89,7 +89,7 @@ export default function LoginView() {
       <Button
         type="button"
         onClick={() => signIn("google", { callbackUrl, redirect: false })}
-        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:bg-[#357AE8] mt-2 dark:bg-blue-600"
+        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:opacity-80 mt-2 dark:bg-blue-600"
       >
         <i className="bx bxl-google text-2xl text-white"></i>
         <p>Login with Google</p>
@@ -97,7 +97,7 @@ export default function LoginView() {
       <Button
         type="button"
         onClick={() => signIn("facebook", { callbackUrl, redirect: false })}
-        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:bg-blue-600 mt-2 dark:bg-blue-600"
+        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:opacity-80 mt-2 dark:bg-blue-600"
       >
         <i className="bx bxl-facebook text-2xl text-white"></i>
         <p>Login with Facebook</p>
@@ -105,7 +105,7 @@ export default function LoginView() {
       <Button
         type="button"
         onClick={() => signIn("github", { callbackUrl, redirect: false })}
-        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:bg-blue-600 mt-2 dark:bg-blue-600"
+        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:opacity-80 mt-2 dark:bg-blue-600"
       >
         <i className="bx bxl-github text-2xl text-white"></i>
         <p>Login with GitHub</p>
