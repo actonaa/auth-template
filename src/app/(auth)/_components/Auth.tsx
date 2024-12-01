@@ -22,7 +22,7 @@ export default function AuthContainer({
       <div className="border border-slate-500 w-[30%] p-5 rounded-lg shadow-lg xm:w-3/4">
         {children}
       </div>
-      <p className="mt-3 text-slate-700">
+      <p className="mt-3 text-slate-700 dark:text-white">
         {text}
         <Link
           href={href || "/"}

@@ -98,7 +98,7 @@ export default function RegisterView() {
         />
         <Button
           type="submit"
-          className="w-full bg-black text-white py-3 hover:opacity-80"
+          className="w-full bg-black text-white py-3 hover:opacity-80 dark:bg-blue-600"
           disabled={loading}
         >
           {loading ? "Loading..." : "Register"}

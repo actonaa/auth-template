@@ -10,7 +10,7 @@ export default function Home() {
     <>
       {data ? (
         <div className="flex flex-col justify-center items-center h-screen">
-          <h1 className="text-3xl font-bold mb-3">
+          <h1 className="text-3xl font-bold mb-3 text-center">
             Welcome👋,{" "}
             {(data.user as { fullname: string }).fullname || data.user?.name}
           </h1>
