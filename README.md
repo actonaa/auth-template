@@ -1,4 +1,4 @@
-This is a Template Auth ReactJS for build your Project.
+Template Auth ReactJS for build your Project.
 
 ## Getting Started
 

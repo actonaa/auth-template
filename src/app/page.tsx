@@ -14,7 +14,7 @@ export default function Home() {
             Welcome👋,{" "}
             {(data.user as { fullname: string }).fullname || data.user?.name}
           </h1>
-          <p className="text-xl font-semibold mb-2">
+          <p className="text-xl font-semibold mb-2 text-center">
             You can use this template for your next project
           </p>
           <p className="mt-4">
@@ -40,7 +40,7 @@ export default function Home() {
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center h-screen">
-          <h1 className="text-3xl font-bold mb-3">
+          <h1 className="text-3xl font-bold mb-3 text-center xm:max-w-[80%]">
             Hello👋, You can try to login
           </h1>
           <p className="mt-4">
