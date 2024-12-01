@@ -8,8 +8,8 @@ type PropsInput = {
 
 export default function Input({ htmlfor, label, type, id, name }: PropsInput) {
   return (
-    <div className="flex flex-col mb-3 text-slate-700">
-      <label htmlFor={htmlfor} className="mb-2">
+    <div className="flex flex-col mb-3 text-slate-700 dark:text-white">
+      <label htmlFor={htmlfor} className="mb-2 dark:text-white">
         {label}
       </label>
       <input
