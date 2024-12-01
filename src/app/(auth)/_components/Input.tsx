@@ -16,7 +16,7 @@ export default function Input({ htmlfor, label, type, id, name }: PropsInput) {
         type={type}
         id={id}
         name={name}
-        className="w-full bg-slate-200 outline-none p-2 mb-2 rounded-sm"
+        className="w-full bg-slate-200 outline-none p-2 mb-2 rounded-sm dark:text-slate-700"
       />
     </div>
   );
