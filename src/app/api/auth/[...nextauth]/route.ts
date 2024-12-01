@@ -3,12 +3,14 @@ import {
   loginWithGoogle,
   signIn,
   loginWithFacebook,
+  loginWithGithub, // Import the GitHub login function
 } from "@/app/(auth)/_lib/service";
 import { compare } from "bcrypt";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
+import GitHubProvider from "next-auth/providers/github";
 
 const authOptions: NextAuthOptions = {
   debug: true,
@@ -48,6 +50,10 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.FACEBOOK_CLIENT_ID || "",
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
     }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account }: any) {
@@ -57,38 +63,50 @@ const authOptions: NextAuthOptions = {
         token.phone = user.phone;
         token.role = user.role;
       }
+      // Handle the user data for Google
       if (account?.provider === "google" && user) {
-        // Ambil nama lengkap dari profil pengguna Google
-        const fullname = user.name || `${user.given_name} ${user.family_name}`; // Gabungkan given_name dan family_name jika tidak ada name
+        const fullname = user.name || `${user.given_name} ${user.family_name}`;
 
         const data = {
-          fullname, // Nama lengkap
+          fullname,
           email: user.email,
-          role: "member", // Role default
+          role: "member",
           type: "google",
         };
 
         const firebaseUser = await loginWithGoogle(data);
 
-        // Perbarui token dengan informasi pengguna dari Firebase
         token.email = firebaseUser?.email || data.email;
-        token.fullname = firebaseUser?.fullname || fullname; // Gunakan fullname
+        token.fullname = firebaseUser?.fullname || fullname;
         token.role = firebaseUser?.role || data.role;
       }
+      // Handle the user data for Facebook
       if (account?.provider === "facebook" && user) {
-        // Ambil nama lengkap dari profil pengguna Facebook
         const fullname = user.name || `${user.first_name} ${user.last_name}`;
 
         const data = {
-          fullname, // Nama lengkap
+          fullname,
           email: user.email,
-          role: "member", // Role default
+          role: "member",
           type: "facebook",
         };
 
         const firebaseUser = await loginWithFacebook(data);
 
-        // Perbarui token dengan informasi pengguna dari Firebase
+        token.email = firebaseUser?.email || data.email;
+        token.fullname = firebaseUser?.fullname || fullname;
+        token.role = firebaseUser?.role || data.role;
+      }
+      // Handle the user data for GitHub
+      if (account?.provider === "github" && user) {
+        const fullname = user.name || user.login || "GitHub User";
+        const data = {
+          fullname,
+          email: user.email,
+          role: "member", // Default role for GitHub users
+          type: "github",
+        };
+        const firebaseUser = await loginWithGithub(data);
         token.email = firebaseUser?.email || data.email;
         token.fullname = firebaseUser?.fullname || fullname;
         token.role = firebaseUser?.role || data.role;

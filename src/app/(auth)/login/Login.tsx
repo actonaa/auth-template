@@ -102,6 +102,14 @@ export default function LoginView() {
         <i className="bx bxl-facebook text-2xl text-white"></i>
         <p>Login with Facebook</p>
       </Button>
+      <Button
+        type="button"
+        onClick={() => signIn("github", { callbackUrl, redirect: false })}
+        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:bg-blue-600 mt-2"
+      >
+        <i className="bx bxl-github text-2xl text-white"></i>
+        <p>Login with GitHub</p>
+      </Button>
     </AuthContainer>
   );
 }
