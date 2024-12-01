@@ -13,6 +13,9 @@ export default {
         foreground: "var(--foreground)",
       },
     },
+    screens: {
+      xm: { max: "600px" },
+    },
   },
   plugins: [],
 } satisfies Config;

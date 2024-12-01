@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { loginWithGoogle, signIn } from "@/app/(auth)/_lib/service";
+import {
+  loginWithGoogle,
+  signIn,
+  loginWithFacebook,
+} from "@/app/(auth)/_lib/service";
 import { compare } from "bcrypt";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 
 const authOptions: NextAuthOptions = {
   debug: true,
@@ -39,6 +44,10 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_OAUTH_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
     }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID || "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account }: any) {
@@ -64,6 +73,24 @@ const authOptions: NextAuthOptions = {
         // Perbarui token dengan informasi pengguna dari Firebase
         token.email = firebaseUser?.email || data.email;
         token.fullname = firebaseUser?.fullname || fullname; // Gunakan fullname
+        token.role = firebaseUser?.role || data.role;
+      }
+      if (account?.provider === "facebook" && user) {
+        // Ambil nama lengkap dari profil pengguna Facebook
+        const fullname = user.name || `${user.first_name} ${user.last_name}`;
+
+        const data = {
+          fullname, // Nama lengkap
+          email: user.email,
+          role: "member", // Role default
+          type: "facebook",
+        };
+
+        const firebaseUser = await loginWithFacebook(data);
+
+        // Perbarui token dengan informasi pengguna dari Firebase
+        token.email = firebaseUser?.email || data.email;
+        token.fullname = firebaseUser?.fullname || fullname;
         token.role = firebaseUser?.role || data.role;
       }
       return token;

@@ -124,4 +124,38 @@ const loginWithGoogle = async (data: UserData): Promise<User | null> => {
   }
 };
 
-export { signUp, signIn, loginWithGoogle };
+const loginWithFacebook = async (data: UserData): Promise<User | null> => {
+  const emailQuery = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
+
+  try {
+    const snapshot = await getDocs(emailQuery);
+    const user = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as User[];
+
+    if (user.length > 0) {
+      return user[0]; // Return the first user found
+    } else {
+      // If the user doesn't exist, create a new one
+      const fullname = data.fullname || "No Name Provided";
+      const role = data.role || "member"; // Ensure role is set
+      const newUser = { ...data, fullname, role };
+
+      // Add the new user to Firestore
+      const docRef = await addDoc(collection(firestore, "users"), newUser);
+      console.log("New user created:", docRef.id);
+
+      // Return the user with the newly generated ID
+      return { id: docRef.id, ...newUser } as User;
+    }
+  } catch (error) {
+    console.error("Error during Facebook login:", error);
+    return null; // Return null if an error occurs
+  }
+};
+
+export { signUp, signIn, loginWithGoogle, loginWithFacebook };

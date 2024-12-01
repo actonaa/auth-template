@@ -89,10 +89,18 @@ export default function LoginView() {
       <Button
         type="button"
         onClick={() => signIn("google", { callbackUrl, redirect: false })}
-        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:opacity-80"
+        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:bg-[#357AE8] mt-2"
       >
         <i className="bx bxl-google text-2xl text-white"></i>
         <p>Login with Google</p>
+      </Button>
+      <Button
+        type="button"
+        onClick={() => signIn("facebook", { callbackUrl, redirect: false })}
+        className="w-full flex gap-2 items-center justify-center bg-black text-white py-2 hover:bg-blue-600 mt-2"
+      >
+        <i className="bx bxl-facebook text-2xl text-white"></i>
+        <p>Login with Facebook</p>
       </Button>
     </AuthContainer>
   );
