@@ -6,17 +6,10 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import {
-  getAuth,
-  signInWithPopup,
-  GithubAuthProvider,
-  FacebookAuthProvider,
-} from "firebase/auth";
 import bcrypt from "bcrypt";
 import app from "@/lib/firebase/init";
 
 const firestore = getFirestore(app);
-const auth = getAuth(app);
 
 interface UserData {
   email: string;
@@ -132,30 +125,25 @@ const loginWithGoogle = async (data: UserData): Promise<User | null> => {
 };
 
 const loginWithFacebook = async (data: UserData): Promise<User | null> => {
-  const provider = new FacebookAuthProvider();
+  const emailQuery = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
 
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-    const emailQuery = query(
-      collection(firestore, "users"),
-      where("email", "==", user.email)
-    );
-
     const snapshot = await getDocs(emailQuery);
-    const existingUser = snapshot.docs.map((doc) => ({
+    const user = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as User[];
 
-    if (existingUser.length > 0) {
-      return existingUser[0]; // Return the first user found
+    if (user.length > 0) {
+      return user[0]; // Return the first user found
     } else {
       // If the user doesn't exist, create a new one
-      const fullname = user.displayName || "No Name Provided"; // Use Facebook's displayName if available
-      const role = data.role || "member"; // Default to "member" if role is not provided
-      const newUser = { email: user.email!, fullname, role };
+      const fullname = data.fullname || "No Name Provided";
+      const role = data.role || "member"; // Ensure role is set
+      const newUser = { ...data, fullname, role };
 
       // Add the new user to Firestore
       const docRef = await addDoc(collection(firestore, "users"), newUser);
@@ -171,30 +159,25 @@ const loginWithFacebook = async (data: UserData): Promise<User | null> => {
 
 // Login with GitHub
 const loginWithGithub = async (data: UserData): Promise<User | null> => {
-  const provider = new GithubAuthProvider();
+  const emailQuery = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
 
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-    const emailQuery = query(
-      collection(firestore, "users"),
-      where("email", "==", user.email)
-    );
-
     const snapshot = await getDocs(emailQuery);
-    const existingUser = snapshot.docs.map((doc) => ({
+    const user = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as User[];
 
-    if (existingUser.length > 0) {
-      return existingUser[0]; // Return the first user found
+    if (user.length > 0) {
+      return user[0]; // Return the first user found
     } else {
       // If the user doesn't exist, create a new one
-      const fullname = user.displayName || "No Name Provided"; // Use GitHub displayName if available
-      const role = data.role || "member"; // Default to "member" if role is not provided
-      const newUser = { email: user.email!, fullname, role };
+      const fullname = data.fullname || "No Name Provided";
+      const role = data.role || "member"; // Ensure role is set
+      const newUser = { ...data, fullname, role };
 
       // Add the new user to Firestore
       const docRef = await addDoc(collection(firestore, "users"), newUser);
@@ -203,7 +186,7 @@ const loginWithGithub = async (data: UserData): Promise<User | null> => {
       return { id: docRef.id, ...newUser } as User;
     }
   } catch (error) {
-    console.error("Error during GitHub login:", error);
+    console.error("Error during github login:", error);
     return null; // Return null if an error occurs
   }
 };
