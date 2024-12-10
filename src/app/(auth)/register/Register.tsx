@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import Input from "../_components/Input";
 import Button from "../_components/Button";
 import AuthContainer from "../_components/Auth";
+import authServices from "../_lib";
 
 export default function RegisterView() {
   const [loading, setLoading] = useState(false);
@@ -36,15 +37,9 @@ export default function RegisterView() {
     };
 
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const res = await authServices.registerAccount(data);
 
-      if (res.ok) {
+      if (res.status === 200) {
         setLoading(false);
         setMessageError("");
         form.reset();
